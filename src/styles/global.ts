@@ -2,8 +2,11 @@ import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
     :root{
-        --background: #121214;
-        --header-bar:#202024;
+        --background: #151515;
+        --marvel-header-nav:#202020;
+        --marvel-text-color:#151515;
+        --body-font:#ffffff;
+        --marvel-red:#EC1D24;
 
     }
 
@@ -23,8 +26,17 @@ const GlobalStyle = createGlobalStyle`
     }
 
     body{
-        background:white;
+        background:var(--background);
         -webkit-font-smoothing: antialiased;
+    }
+
+    body, input, textarea,button{
+        font-family: 'Roboto',sans-serif;
+        font-weight: 400;
+    }
+
+    h1,h2,h3,h4,h5,h6,strong{
+        font-weight: 600;
     }
 
     button{
