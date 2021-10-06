@@ -5,8 +5,9 @@ const GlobalStyle = createGlobalStyle`
         --background: #151515;
         --marvel-header-nav:#202020;
         --marvel-text-color:#151515;
-        --body-font:#ffffff;
+        --body-font-color:#ffffff;
         --marvel-red:#EC1D24;
+        --marvel-border:#393939;
 
     }
 
