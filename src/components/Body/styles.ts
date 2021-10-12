@@ -39,20 +39,21 @@ export const Container = styled.main<IContainerProps>`
         }
     }
 
-    div.search-menu {
-        display: flex;
-        flex-direction: row;
-        gap: 1rem;
-    }
-
     div.search-form {
+        div.search-menu {
+            display: flex;
+            flex-direction: row;
+            gap: 1rem;
+        }
+
         display: flex;
         flex-direction: row;
-        gap: 1rem;
+
         justify-content: space-between;
         background: var(--marvel-header-nav);
         width: 100%;
         height: 5rem;
+
         input {
             color: white;
             width: 100%;

@@ -1,4 +1,5 @@
-import React, { FormEvent } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
+import { HiUserGroup, HiOutlineBookOpen } from "react-icons/hi";
 
 import { SearchType } from "../../types";
 import { Container } from "./styles";
@@ -9,34 +10,32 @@ interface ISearchTypeButtonProps {
 
 const SearchTypeButton = (props: ISearchTypeButtonProps): JSX.Element => {
     const { handleSearchType } = props;
+    const [clicked, setClicked] = useState<string>();
 
-    const handleChange = (event: FormEvent<HTMLInputElement>) => {
-        const searchTypeSelected = event.currentTarget.value as SearchType;
-        handleSearchType(searchTypeSelected);
-    };
+    useEffect(() => {
+        const searchTypeClicked = clicked as SearchType;
+        handleSearchType(searchTypeClicked);
+    }, [clicked]);
 
     return (
         <Container>
-            <div>
-                <input
-                    type="radio"
-                    name="search-type"
-                    id="character"
-                    value="characters"
-                    onChange={handleChange}
+            <button type="button" onClick={() => setClicked("characters")}>
+                <HiUserGroup
+                    title="Search by Character"
+                    className="icon"
+                    size="2rem"
+                    color={clicked === "characters" ? "#EC1D24" : "#ffffff"}
                 />
                 <span>CHARACTER</span>
-            </div>
-            <div>
-                <input
-                    type="radio"
-                    name="search-type"
-                    id="comics"
-                    value="comics"
-                    onChange={handleChange}
+            </button>
+            <button type="button" onClick={() => setClicked("comics")}>
+                <HiOutlineBookOpen
+                    title="Search by Comics"
+                    size="2rem"
+                    color={clicked === "comics" ? "#EC1D24" : "#ffffff"}
                 />
                 <span>COMICS</span>
-            </div>
+            </button>
         </Container>
     );
 };
