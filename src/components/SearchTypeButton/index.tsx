@@ -6,10 +6,11 @@ import { Container } from "./styles";
 
 interface ISearchTypeButtonProps {
     handleSearchType: (type: SearchType) => void;
+    data: SearchType | undefined;
 }
 
 const SearchTypeButton = (props: ISearchTypeButtonProps): JSX.Element => {
-    const { handleSearchType } = props;
+    const { handleSearchType, data } = props;
     const [clicked, setClicked] = useState<string>();
 
     useEffect(() => {
@@ -24,7 +25,7 @@ const SearchTypeButton = (props: ISearchTypeButtonProps): JSX.Element => {
                     title="Search by Character"
                     className="icon"
                     size="2rem"
-                    color={clicked === "characters" ? "#EC1D24" : "#ffffff"}
+                    color={data === "characters" ? "#EC1D24" : "#ffffff"}
                 />
                 <span>CHARACTER</span>
             </button>
@@ -32,7 +33,7 @@ const SearchTypeButton = (props: ISearchTypeButtonProps): JSX.Element => {
                 <HiOutlineBookOpen
                     title="Search by Comics"
                     size="2rem"
-                    color={clicked === "comics" ? "#EC1D24" : "#ffffff"}
+                    color={data === "comics" ? "#EC1D24" : "#ffffff"}
                 />
                 <span>COMICS</span>
             </button>

@@ -17,6 +17,7 @@ export const Container = styled.main<IContainerProps>`
         display: flex;
         flex-direction: column;
         position: relative;
+
         div.loading-list {
             font-size: 1rem;
             font-weight: bold;
@@ -40,26 +41,44 @@ export const Container = styled.main<IContainerProps>`
     }
 
     div.search-form {
-        div.search-menu {
-            display: flex;
-            flex-direction: row;
-            gap: 1rem;
-        }
-
         display: flex;
         flex-direction: row;
-
+        align-items: stretch;
+        gap: 1rem;
+        padding: 0.5rem;
         justify-content: space-between;
         background: var(--marvel-header-nav);
         width: 100%;
         height: 5rem;
+        position: relative;
 
-        input {
-            color: white;
-            width: 100%;
-            height: 3rem;
-            border: 0.1rem solid var(--marvel-border);
-            background: var(--marvel-header-nav);
+        div.search-field {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+
+            flex: 1;
+
+            input {
+                width: 100%;
+                padding: 1rem;
+                color: white;
+                border-radius: 0.5rem;
+                border: 0.1rem solid var(--marvel-border);
+                background: var(--marvel-header-nav);
+            }
+            button {
+                position: absolute;
+                top: 0;
+                right: 1rem;
+                bottom: 0;
+                background: transparent;
+                border: none;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
         }
     }
 `;

@@ -1,5 +1,6 @@
 import { AxiosResponse } from "axios";
 import React, { useEffect, useState, memo } from "react";
+import { HiX } from "react-icons/hi";
 
 import { api } from "../../services/api";
 import { SearchType } from "../../types";
@@ -50,8 +51,15 @@ export const Body = (): JSX.Element => {
                 console.log("characters", apiResponse.data.results);
                 setLoading(false);
             });
+        } else {
+            setCharacters(undefined);
         }
     }, [query, searchType]);
+
+    const handleClear = () => {
+        setQuery("");
+        setSearchType(undefined);
+    };
 
     const renderList = () => {
         return characters?.map((character) => (
@@ -74,19 +82,30 @@ export const Body = (): JSX.Element => {
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         console.log(event.target.value);
         setQuery(event.target.value);
+        setCharacters(undefined);
     };
 
     return (
         <Container display={loading}>
             <div className="search-form">
-                <input
-                    value={query}
-                    onChange={handleChange}
-                    type="text"
-                    name="search"
-                    id="search-field"
+                <div className="search-field">
+                    <input
+                        value={query}
+                        onChange={handleChange}
+                        type="text"
+                        name="search"
+                        id="search-field"
+                    />
+                    {query && query.length > 0 && (
+                        <button type="button" onClick={handleClear}>
+                            <HiX size="2rem" color="#fff" />
+                        </button>
+                    )}
+                </div>
+                <SearchTypeButton
+                    handleSearchType={setSearchType}
+                    data={searchType}
                 />
-                <SearchTypeButton handleSearchType={setSearchType} />
             </div>
 
             <div className="result-list">
