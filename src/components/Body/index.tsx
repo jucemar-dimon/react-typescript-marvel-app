@@ -1,13 +1,16 @@
 import { AxiosResponse } from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 
 import { api } from "../../services/api";
+import { SearchType } from "../../types";
+import SearchTypeButton from "../SearchTypeButton";
 import { Container, Card } from "./styles";
 
 interface ICharacter {
-    name: string;
-    description: string;
-    thumbnail: {
+    id: number;
+    name?: string;
+    title?: string;
+    thumbnail?: {
         path: string;
         extension: string;
     };
@@ -26,34 +29,72 @@ interface IResponse {
     data: IData;
 }
 
-const Body: React.FC = () => {
+export const Body = (): JSX.Element => {
     const [characters, setCharacters] = useState<[ICharacter]>();
+    const [query, setQuery] = useState<string>();
+    const [searchType, setSearchType] = useState<SearchType>();
+    const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
-        api.get(`/characters`, { params: { nameStartsWith: "wol" } }).then(
-            (response: AxiosResponse) => {
+        const searchParameter =
+            searchType === "comics" ? "titleStartsWith" : "nameStartsWith";
+
+        if (query && query.length > 0 && searchType && searchType.length > 0) {
+            setLoading(true);
+            api.get(`/${searchType}`, {
+                params: { [searchParameter]: query },
+            }).then((response: AxiosResponse) => {
                 const apiResponse: IResponse = response.data;
+
                 setCharacters(apiResponse.data.results);
-                console.log("characters", characters);
-            }
-        );
-    }, []);
+                console.log("characters", apiResponse.data.results);
+                setLoading(false);
+            });
+        }
+    }, [query, searchType]);
 
     const renderList = () => {
         return characters?.map((character) => (
-            <Card key={character.name}>
+            <Card key={character.id}>
                 {character.thumbnail && (
-                    <img
-                        src={`${character.thumbnail.path}.${character.thumbnail.extension}`}
-                        alt={`Imagem do personagem ${character.name}`}
-                    />
+                    <div>
+                        <img
+                            src={`${character.thumbnail.path}.${character.thumbnail.extension}`}
+                            alt={`Imagem do personagem ${character.name}`}
+                        />
+                    </div>
                 )}
-                <p>{character.name}</p>
+                <div className="title">
+                    <strong>{character.name || character.title}</strong>
+                </div>
             </Card>
         ));
     };
 
-    return <Container>{renderList()}</Container>;
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        console.log(event.target.value);
+        setQuery(event.target.value);
+    };
+
+    return (
+        <Container display={loading}>
+            <div className="search-form">
+                <input
+                    value={query}
+                    onChange={handleChange}
+                    type="text"
+                    name="search"
+                    id="search-field"
+                />
+                <SearchTypeButton handleSearchType={setSearchType} />
+            </div>
+
+            <div className="result-list">
+                {renderList()}
+                <div className="loading-list">{loading && "LOADING"}</div>
+            </div>
+        </Container>
+    );
 };
 
-export default Body;
+export default memo(Body);
