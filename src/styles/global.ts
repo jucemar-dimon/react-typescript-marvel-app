@@ -3,7 +3,7 @@ import { createGlobalStyle } from "styled-components";
 const GlobalStyle = createGlobalStyle`
     :root{
         --background: #151515;
-        --marvel-header-nav:#202020;
+        --marvel-header-nav:#202020bb;
         --marvel-text-color:#151515;
         --body-font-color:#ffffff;
         --marvel-red:#EC1D24;
@@ -27,7 +27,16 @@ const GlobalStyle = createGlobalStyle`
     }
 
     body{
-        background:var(--background);
+        background-image: url("fundo.jpg");
+
+
+        background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: top;
+  background-size: cover;
+
+
+
         -webkit-font-smoothing: antialiased;
     }
 

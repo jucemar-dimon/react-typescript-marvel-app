@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 export const Container = styled.header`
-    background: var(--marvel-header-nav);
     color: var(--body-font);
     display: flex;
     flex-direction: row;

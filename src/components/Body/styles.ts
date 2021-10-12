@@ -13,10 +13,13 @@ export const Container = styled.main<IContainerProps>`
     position: relative;
 
     div.result-list {
+        padding: 1rem;
+        border-radius: 0.5rem;
         gap: 1rem;
         display: flex;
         flex-direction: column;
         position: relative;
+        background-color: var(--marvel-header-nav);
 
         div.loading-list {
             font-size: 1rem;
@@ -41,18 +44,20 @@ export const Container = styled.main<IContainerProps>`
     }
 
     div.search-form {
+        border-radius: 0.5rem;
         display: flex;
         flex-direction: row;
         align-items: stretch;
         gap: 1rem;
-        padding: 0.5rem;
+
         justify-content: space-between;
         background: var(--marvel-header-nav);
         width: 100%;
-        height: 5rem;
+        height: 6rem;
         position: relative;
 
         div.search-field {
+            padding: 1rem;
             position: relative;
             display: flex;
             justify-content: center;
