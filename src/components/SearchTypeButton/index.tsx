@@ -24,7 +24,7 @@ const SearchTypeButton = (props: ISearchTypeButtonProps): JSX.Element => {
                 <HiUserGroup
                     title="Search by Character"
                     className="icon"
-                    size="2rem"
+                    size="1.5rem"
                     color={data === "characters" ? "#EC1D24" : "#ffffff"}
                 />
                 <span>CHARACTER</span>
@@ -32,7 +32,7 @@ const SearchTypeButton = (props: ISearchTypeButtonProps): JSX.Element => {
             <button type="button" onClick={() => setClicked("comics")}>
                 <HiOutlineBookOpen
                     title="Search by Comics"
-                    size="2rem"
+                    size="1.5rem"
                     color={data === "comics" ? "#EC1D24" : "#ffffff"}
                 />
                 <span>COMICS</span>

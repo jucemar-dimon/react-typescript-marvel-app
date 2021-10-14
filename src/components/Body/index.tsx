@@ -43,11 +43,15 @@ export const Body = (): JSX.Element => {
         if (query && query.length > 0 && searchType && searchType.length > 0) {
             setLoading(true);
             api.get(`/${searchType}`, {
-                params: { [searchParameter]: query },
+                params: {
+                    [searchParameter]: query,
+                    offset: 80,
+                },
             }).then((response: AxiosResponse) => {
                 const apiResponse: IResponse = response.data;
 
                 setCharacters(apiResponse.data.results);
+                console.log("response", response);
                 console.log("characters", apiResponse.data.results);
                 setLoading(false);
             });
@@ -98,7 +102,7 @@ export const Body = (): JSX.Element => {
                     />
                     {query && query.length > 0 && (
                         <button type="button" onClick={handleClear}>
-                            <HiX size="2rem" color="#fff" />
+                            <HiX size="1.5rem" color="#fff" />
                         </button>
                     )}
                 </div>
