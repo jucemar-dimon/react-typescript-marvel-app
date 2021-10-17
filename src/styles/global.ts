@@ -43,13 +43,18 @@ const GlobalStyle = createGlobalStyle`
         font-weight: 600;
     }
 
+
     button{
         cursor: pointer;
     }
 
     [disabled]{
         cursor: not-allowed;
-        opacity: 0.6;
+        filter: saturate(50%);
+        color: var(--body-font-color);
+
+
+
     }
 
 `;

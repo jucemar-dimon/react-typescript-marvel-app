@@ -1,5 +1,6 @@
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { HiUserGroup, HiOutlineBookOpen } from "react-icons/hi";
+import { Link } from "react-router-dom";
 
 import { SearchType } from "../../types";
 import { Container } from "./styles";
@@ -11,7 +12,7 @@ interface ISearchTypeButtonProps {
 
 const SearchTypeButton = (props: ISearchTypeButtonProps): JSX.Element => {
     const { handleSearchType, data } = props;
-    const [clicked, setClicked] = useState<string>();
+    const [clicked, setClicked] = useState<string>("");
 
     useEffect(() => {
         const searchTypeClicked = clicked as SearchType;
@@ -20,7 +21,7 @@ const SearchTypeButton = (props: ISearchTypeButtonProps): JSX.Element => {
 
     return (
         <Container>
-            <button type="button" onClick={() => setClicked("characters")}>
+            <Link to="characters" onClick={() => setClicked("characters")}>
                 <HiUserGroup
                     title="Search by Character"
                     className="icon"
@@ -28,15 +29,15 @@ const SearchTypeButton = (props: ISearchTypeButtonProps): JSX.Element => {
                     color={data === "characters" ? "#EC1D24" : "#ffffff"}
                 />
                 <span>CHARACTER</span>
-            </button>
-            <button type="button" onClick={() => setClicked("comics")}>
+            </Link>
+            <Link to="comics" onClick={() => setClicked("comics")}>
                 <HiOutlineBookOpen
                     title="Search by Comics"
                     size="1.5rem"
                     color={data === "comics" ? "#EC1D24" : "#ffffff"}
                 />
                 <span>COMICS</span>
-            </button>
+            </Link>
         </Container>
     );
 };

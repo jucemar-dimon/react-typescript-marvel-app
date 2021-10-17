@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 interface IContainerProps {
-    display: boolean;
+    isLoading: boolean;
 }
 
 export const Container = styled.main<IContainerProps>`
@@ -47,7 +47,7 @@ export const Container = styled.main<IContainerProps>`
                 border: 0.1rem solid var(--marvel-border);
                 background-color: var(--marvel-header-nav);
             }
-            button {
+            a {
                 position: absolute;
                 top: 0;
                 right: 1rem;
@@ -61,38 +61,63 @@ export const Container = styled.main<IContainerProps>`
         }
     }
 
-    div.result-list {
+    div.result-area {
         padding: 0.5rem;
-        height: 41rem;
+        height: 40.2rem;
         border: 0.1rem solid var(--marvel-border);
-
         border-radius: 0.5rem;
         gap: 0.5rem;
         display: flex;
         flex-direction: column;
+        justify-content: space-between;
+
         position: relative;
         background-color: #000000cc;
 
-        div.loading-list {
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            font-weight: bold;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            background: #ec1d2499;
+        div.pagination {
+            align-self: flex-end;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
 
-            height: 100%;
-            position: absolute;
-            z-index: 10;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            button.btn-page {
+                width: 2rem;
+                height: 2rem;
+                border: none;
+                color: var(--body-font-color);
 
-            margin-left: auto;
-            margin-right: auto;
-            display: ${(props) => (props.display ? "flex" : "none")};
+                background-color: var(--marvel-red);
+            }
+        }
+
+        div.result-list {
+            gap: 0.5rem;
+            display: flex;
+            flex-direction: column;
+
+            position: relative;
+
+            div.loading-list {
+                border-radius: 0.5rem;
+                font-size: 1rem;
+                font-weight: bold;
+                justify-content: center;
+                align-items: center;
+                color: white;
+                background: #ec1d2499;
+
+                height: 100%;
+                position: absolute;
+                z-index: 10;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+
+                margin-left: auto;
+                margin-right: auto;
+                display: ${(props) => (props.isLoading ? "flex" : "none")};
+            }
         }
     }
 `;

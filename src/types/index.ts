@@ -1,1 +1,1 @@
-export type SearchType = "characters" | "comics";
+export type SearchType = "characters" | "comics" | "";
