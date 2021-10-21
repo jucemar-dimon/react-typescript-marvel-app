@@ -4,7 +4,7 @@ export const Container = styled.div`
     display: flex;
     margin: 0.5em;
 
-    a {
+    button {
         text-decoration: none;
         display: flex;
         flex-direction: column;

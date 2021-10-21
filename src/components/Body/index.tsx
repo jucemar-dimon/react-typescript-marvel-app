@@ -1,10 +1,12 @@
 import { AxiosResponse } from "axios";
+import qs from "query-string";
 import React, { useEffect, useState, memo } from "react";
 import { HiX } from "react-icons/hi";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useHistory, useParams } from "react-router-dom";
 
 import { useCharacters } from "../../hooks/useCharacters";
 import { usePagination } from "../../hooks/usePagination";
+import { useQueryOnURL } from "../../hooks/useQueryOnURL";
 import { api } from "../../services/api";
 import { SearchType } from "../../types";
 import SearchTypeButton from "../SearchTypeButton";
@@ -29,30 +31,54 @@ export const Body = (): JSX.Element => {
     const SEARCH_TYPE_COMICS = "comics";
     const [query, setQuery] = useState<string>("");
 
+    const { type } = useParams<IRouterParam>();
+
     const [searchType, setSearchType] = useState<SearchType>("");
     const [loading, setLoading] = useState<boolean>(false);
     const { characters, getCharacters, totalPages, setCharacters } =
         useCharacters(query, 10);
-    const { actualPage, setActualPage, clearURL, setQueryOfSearch } =
-        usePagination();
+    const { actualPage, setActualPage } = usePagination();
+    const { setActualQuery, setActualPath, clearSearch } = useQueryOnURL();
 
     useEffect(() => {
         if (searchType && searchType.includes(SEARCH_TYPE_CHARACTER)) {
             getCharacters(actualPage);
+
+            setActualQuery(query);
         }
     }, [query, actualPage, searchType]);
 
+    useEffect(() => {
+        setActualQuery(query);
+    }, [type]);
+
     const handleClikPagination = (page: number) => {
         setActualPage(page);
+    };
+
+    const handleSearchType = (type: SearchType) => {
+        setSearchType(type);
+        setActualPath(type);
+        setActualPage(1);
     };
 
     const handleClear = () => {
         setSearchType("");
         setQuery("");
         setCharacters([]);
-        setActualPage(1);
-        clearURL();
+        clearSearch();
     };
+
+    function isInputDisabled() {
+        if (
+            searchType !== SEARCH_TYPE_CHARACTER &&
+            searchType !== SEARCH_TYPE_COMICS
+        ) {
+            return true;
+        }
+
+        return false;
+    }
 
     function renderPagination() {
         if (characters.length > 0) {
@@ -96,7 +122,7 @@ export const Body = (): JSX.Element => {
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setQuery(event.currentTarget.value);
-        setQueryOfSearch(event.currentTarget.value);
+        setActualQuery(event.currentTarget.value);
         console.log("QUERY", query);
     };
 
@@ -105,6 +131,7 @@ export const Body = (): JSX.Element => {
             <div className="search-form">
                 <div className="search-field">
                     <input
+                        disabled={isInputDisabled()}
                         value={query}
                         onChange={handleChange}
                         type="text"
@@ -118,7 +145,7 @@ export const Body = (): JSX.Element => {
                     )}
                 </div>
                 <SearchTypeButton
-                    handleSearchType={setSearchType}
+                    handleSearchType={handleSearchType}
                     data={searchType}
                 />
             </div>

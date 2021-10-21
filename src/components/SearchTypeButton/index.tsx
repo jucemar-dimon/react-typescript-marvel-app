@@ -12,16 +12,13 @@ interface ISearchTypeButtonProps {
 
 const SearchTypeButton = (props: ISearchTypeButtonProps): JSX.Element => {
     const { handleSearchType, data } = props;
-    const [clicked, setClicked] = useState<string>("");
-
-    useEffect(() => {
-        const searchTypeClicked = clicked as SearchType;
-        handleSearchType(searchTypeClicked);
-    }, [clicked]);
 
     return (
         <Container>
-            <Link to="characters" onClick={() => setClicked("characters")}>
+            <button
+                type="button"
+                onClick={() => handleSearchType("characters")}
+            >
                 <HiUserGroup
                     title="Search by Character"
                     className="icon"
@@ -29,15 +26,15 @@ const SearchTypeButton = (props: ISearchTypeButtonProps): JSX.Element => {
                     color={data === "characters" ? "#EC1D24" : "#ffffff"}
                 />
                 <span>CHARACTER</span>
-            </Link>
-            <Link to="comics" onClick={() => setClicked("comics")}>
+            </button>
+            <button type="button" onClick={() => handleSearchType("comics")}>
                 <HiOutlineBookOpen
                     title="Search by Comics"
                     size="1.5rem"
                     color={data === "comics" ? "#EC1D24" : "#ffffff"}
                 />
                 <span>COMICS</span>
-            </Link>
+            </button>
         </Container>
     );
 };

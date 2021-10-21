@@ -13,30 +13,18 @@ export function usePagination() {
     }
 
     const [actualPage, setActualPage] = useState(getActualPage() || 1);
-    const [typeOfSearch, setTypeOfSearch] = useState("");
-    const [queryOfSearch, setQueryOfSearch] = useState("");
-
-    function clearURL() {
-        /*  const queryParamns = qs.exclude(keys: { page );
-        history.push({
-            search: "",
-        }); */
-    }
 
     useEffect(() => {
-        console.log("location", history);
-
         const queryParamns = qs.parse(location.search);
-        if (queryOfSearch.length > 0) {
+        if (actualPage) {
             history.push({
                 search: qs.stringify({
                     ...queryParamns,
-                    query: queryOfSearch,
                     page: actualPage,
                 }),
             });
         }
     }, [actualPage]);
 
-    return { setActualPage, actualPage, clearURL, setQueryOfSearch };
+    return { setActualPage, actualPage };
 }
