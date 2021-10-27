@@ -36,7 +36,15 @@ interface IResponse {
     data: IData;
 }
 
-export function useCharacters(query: string, pageLimit: number) {
+export function useCharacters(
+    query: string,
+    pageLimit: number
+): {
+    characters: ICharacter[];
+    getCharacters: (page: number) => void;
+    totalPages: number;
+    setCharacters: (characters: ICharacter[]) => void;
+} {
     const [characters, setCharacters] = useState<ICharacter[]>([]);
     const [totalPages, setTotalPages] = useState<number>(0);
 
@@ -51,14 +59,11 @@ export function useCharacters(query: string, pageLimit: number) {
             const apiResponse: IResponse = response.data;
             console.log("response", apiResponse.data);
 
-            const calcTotalPages = String(
+            const calcTotalPages = Math.ceil(
                 apiResponse.data.total / pageLimit
-            ).split(".");
+            );
 
-            const intPart = Number(calcTotalPages[0]);
-            const floatPart = Number(calcTotalPages[1]);
-
-            setTotalPages(intPart + (floatPart > 0 ? 1 : 0));
+            setTotalPages(calcTotalPages);
             setCharacters(apiResponse.data.results);
         });
     }

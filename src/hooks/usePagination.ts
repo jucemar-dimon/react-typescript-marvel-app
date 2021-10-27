@@ -6,25 +6,25 @@ export function usePagination() {
     const location = useLocation();
     const history = useHistory();
 
-    function getActualPage() {
+    function getCurrentPage() {
         const queryParamns = qs.parse(location.search);
         const { page } = queryParamns;
         return page ? Number(page) : undefined;
     }
 
-    const [actualPage, setActualPage] = useState(getActualPage() || 1);
+    const [currentPage, setCurrentPage] = useState(getCurrentPage() || 1);
 
     useEffect(() => {
         const queryParamns = qs.parse(location.search);
-        if (actualPage) {
+        if (currentPage) {
             history.push({
                 search: qs.stringify({
                     ...queryParamns,
-                    page: actualPage,
+                    page: currentPage,
                 }),
             });
         }
-    }, [actualPage]);
+    }, [currentPage]);
 
-    return { setActualPage, actualPage };
+    return { setCurrentPage, currentPage };
 }

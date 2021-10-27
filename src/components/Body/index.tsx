@@ -9,6 +9,7 @@ import { usePagination } from "../../hooks/usePagination";
 import { useQueryOnURL } from "../../hooks/useQueryOnURL";
 import { api } from "../../services/api";
 import { SearchType } from "../../types";
+import Pagination from "../Pagination";
 import SearchTypeButton from "../SearchTypeButton";
 import { Container, Card } from "./styles";
 
@@ -37,29 +38,25 @@ export const Body = (): JSX.Element => {
     const [loading, setLoading] = useState<boolean>(false);
     const { characters, getCharacters, totalPages, setCharacters } =
         useCharacters(query, 10);
-    const { actualPage, setActualPage } = usePagination();
+    const { currentPage, setCurrentPage } = usePagination();
     const { setActualQuery, setActualPath, clearSearch } = useQueryOnURL();
 
     useEffect(() => {
         if (searchType && searchType.includes(SEARCH_TYPE_CHARACTER)) {
-            getCharacters(actualPage);
+            getCharacters(currentPage);
 
             setActualQuery(query);
         }
-    }, [query, actualPage, searchType]);
+    }, [query, currentPage, searchType]);
 
     useEffect(() => {
         setActualQuery(query);
     }, [type]);
 
-    const handleClikPagination = (page: number) => {
-        setActualPage(page);
-    };
-
     const handleSearchType = (type: SearchType) => {
         setSearchType(type);
         setActualPath(type);
-        setActualPage(1);
+        setCurrentPage(1);
     };
 
     const handleClear = () => {
@@ -78,28 +75,6 @@ export const Body = (): JSX.Element => {
         }
 
         return false;
-    }
-
-    function renderPagination() {
-        if (characters.length > 0) {
-            return Array(totalPages)
-                .fill("")
-                .map((_, index) => {
-                    return (
-                        <button
-                            disabled={actualPage === index + 1}
-                            className="btn-page"
-                            key={`page-${index + 1}`}
-                            type="button"
-                            onClick={() => handleClikPagination(index + 1)}
-                        >
-                            {index + 1}
-                        </button>
-                    );
-                });
-        }
-
-        return null;
     }
 
     const renderList = () => {
@@ -155,7 +130,14 @@ export const Body = (): JSX.Element => {
                     {renderList()}
                     <div className="loading-list">{loading && "LOADING"}</div>
                 </div>
-                <div className="pagination">{renderPagination()}</div>
+
+                {characters.length > 0 && (
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        setCurrentPage={setCurrentPage}
+                    />
+                )}
             </div>
         </Container>
     );

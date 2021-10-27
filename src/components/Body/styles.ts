@@ -12,9 +12,23 @@ export const Container = styled.main<IContainerProps>`
     display: flex;
     flex-direction: column;
     position: relative;
-    padding-left: 10%;
-    padding-right: 10%;
+    padding-left: 25%;
+    padding-right: 25%;
     width: 100%;
+
+    @media (max-width: 1080px) {
+        padding-left: 15%;
+        padding-right: 15%;
+    }
+    @media (max-width: 720px) {
+        padding-left: 10%;
+        padding-right: 10%;
+    }
+
+    @media (max-width: 480px) {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
 
     div.search-form {
         border: 0.1rem solid var(--marvel-border);
@@ -73,22 +87,6 @@ export const Container = styled.main<IContainerProps>`
 
         position: relative;
         background-color: #000000cc;
-
-        div.pagination {
-            align-self: flex-end;
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-end;
-
-            button.btn-page {
-                width: 2rem;
-                height: 2rem;
-                border: none;
-                color: var(--body-font-color);
-
-                background-color: var(--marvel-red);
-            }
-        }
 
         div.result-list {
             gap: 0.5rem;
