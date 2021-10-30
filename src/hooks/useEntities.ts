@@ -14,10 +14,20 @@ interface IData {
     limit: number;
     total: number;
     count: number;
-    results: [ICharacter];
+    results: [IEntity];
 }
 
-interface ICharacter {
+interface IReturnedProps {
+    entities: IEntity[];
+    getEntities: (page: number) => void;
+    totalPages: number;
+    totalEntities: number;
+    setEntities: (entities: IEntity[]) => void;
+    orderBy: string;
+    setOrderBy: (order: string) => void;
+}
+
+interface IEntity {
     // The unique ID of the character resource.,
     id?: number;
     // The name of the character.,
@@ -36,24 +46,29 @@ interface IResponse {
     data: IData;
 }
 
-export function useCharacters(
+export function useEntities(
     query: string,
+    searchType: string,
     pageLimit: number
-): {
-    characters: ICharacter[];
-    getCharacters: (page: number) => void;
-    totalPages: number;
-    setCharacters: (characters: ICharacter[]) => void;
-} {
-    const [characters, setCharacters] = useState<ICharacter[]>([]);
+): IReturnedProps {
+    const [entities, setEntities] = useState<IEntity[]>([]);
     const [totalPages, setTotalPages] = useState<number>(0);
+    const [totalEntities, setTotalEntities] = useState<number>(0);
+    const [orderBy, setOrderBy] = useState<string>("");
 
-    function getCharacters(page: number) {
+    function getEntities(page: number) {
         const currentOffset = page < 2 ? 0 : (page - 1) * pageLimit;
-        api.get(`/characters`, {
+        const parameterOrderBy = searchType.includes("characters")
+            ? `${orderBy}name`
+            : `${orderBy}title`;
+        const parameterForSearch = searchType.includes("characters")
+            ? "nameStartsWith"
+            : "titleStartsWith";
+        api.get(`/${searchType}`, {
             params: {
-                nameStartsWith: query,
+                [parameterForSearch]: query,
                 offset: currentOffset,
+                orderBy: parameterOrderBy,
             },
         }).then((response: AxiosResponse) => {
             const apiResponse: IResponse = response.data;
@@ -64,8 +79,17 @@ export function useCharacters(
             );
 
             setTotalPages(calcTotalPages);
-            setCharacters(apiResponse.data.results);
+            setEntities(apiResponse.data.results);
+            setTotalEntities(apiResponse.data.total);
         });
     }
-    return { characters, getCharacters, totalPages, setCharacters };
+    return {
+        entities,
+        getEntities,
+        totalPages,
+        setEntities,
+        totalEntities,
+        orderBy,
+        setOrderBy,
+    };
 }

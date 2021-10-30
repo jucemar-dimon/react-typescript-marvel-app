@@ -77,7 +77,7 @@ export const Container = styled.main<IContainerProps>`
 
     div.result-area {
         padding: 0.5rem;
-        height: 40.2rem;
+        height: 43rem;
         border: 0.1rem solid var(--marvel-border);
         border-radius: 0.5rem;
         gap: 0.5rem;
@@ -87,6 +87,16 @@ export const Container = styled.main<IContainerProps>`
 
         position: relative;
         background-color: #000000cc;
+
+        div.total-results {
+            font-size: 0.75rem;
+            font-weight: bold;
+            width: 100%;
+            line-height: 1.5rem;
+            margin: 0.5rem 0;
+            display: flex;
+            justify-content: flex-end;
+        }
 
         div.result-list {
             gap: 0.5rem;

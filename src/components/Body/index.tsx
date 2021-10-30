@@ -4,7 +4,7 @@ import React, { useEffect, useState, memo } from "react";
 import { HiX } from "react-icons/hi";
 import { Link, useLocation, useHistory, useParams } from "react-router-dom";
 
-import { useCharacters } from "../../hooks/useCharacters";
+import { useEntities } from "../../hooks/useEntities";
 import { usePagination } from "../../hooks/usePagination";
 import { useQueryOnURL } from "../../hooks/useQueryOnURL";
 import { api } from "../../services/api";
@@ -17,7 +17,7 @@ interface IRouterParam {
     type: string;
 }
 
-interface ICharacter {
+interface IEntities {
     id: number;
     name?: string;
     title?: string;
@@ -30,24 +30,29 @@ interface ICharacter {
 export const Body = (): JSX.Element => {
     const SEARCH_TYPE_CHARACTER = "characters";
     const SEARCH_TYPE_COMICS = "comics";
+    const ASC_ORDER = "";
+    const DES_ORDER = "-";
     const [query, setQuery] = useState<string>("");
 
     const { type } = useParams<IRouterParam>();
 
     const [searchType, setSearchType] = useState<SearchType>("");
-    const [loading, setLoading] = useState<boolean>(false);
-    const { characters, getCharacters, totalPages, setCharacters } =
-        useCharacters(query, 10);
+
+    const {
+        entities,
+        getEntities,
+        totalPages,
+        setEntities,
+        totalEntities,
+        orderBy,
+        setOrderBy,
+    } = useEntities(query, searchType, 10);
     const { currentPage, setCurrentPage } = usePagination();
     const { setActualQuery, setActualPath, clearSearch } = useQueryOnURL();
 
     useEffect(() => {
-        if (searchType && searchType.includes(SEARCH_TYPE_CHARACTER)) {
-            getCharacters(currentPage);
-
-            setActualQuery(query);
-        }
-    }, [query, currentPage, searchType]);
+        getEntities(currentPage);
+    }, [query, currentPage, searchType, orderBy]);
 
     useEffect(() => {
         setActualQuery(query);
@@ -62,8 +67,9 @@ export const Body = (): JSX.Element => {
     const handleClear = () => {
         setSearchType("");
         setQuery("");
-        setCharacters([]);
+        setEntities([]);
         clearSearch();
+        setOrderBy(ASC_ORDER);
     };
 
     function isInputDisabled() {
@@ -78,18 +84,18 @@ export const Body = (): JSX.Element => {
     }
 
     const renderList = () => {
-        return characters?.map((character) => (
-            <Card key={character.id}>
-                {character.thumbnail && (
+        return entities?.map((entity) => (
+            <Card key={entity.id}>
+                {entity.thumbnail && (
                     <div>
                         <img
-                            src={`${character.thumbnail.path}.${character.thumbnail.extension}`}
-                            alt={`Imagem do personagem ${character.name}`}
+                            src={`${entity.thumbnail.path}.${entity.thumbnail.extension}`}
+                            alt={`Imagem do personagem ${entity.name}`}
                         />
                     </div>
                 )}
                 <div className="title">
-                    <strong>{character.name}</strong>
+                    <strong>{entity.name}</strong>
                 </div>
             </Card>
         ));
@@ -101,8 +107,12 @@ export const Body = (): JSX.Element => {
         console.log("QUERY", query);
     };
 
+    const toogleOrderBy = () => {
+        setOrderBy(orderBy === ASC_ORDER ? DES_ORDER : ASC_ORDER);
+    };
+
     return (
-        <Container isLoading={loading}>
+        <Container isLoading={false}>
             <div className="search-form">
                 <div className="search-field">
                     <input
@@ -122,22 +132,31 @@ export const Body = (): JSX.Element => {
                 <SearchTypeButton
                     handleSearchType={handleSearchType}
                     data={searchType}
+                    orderBy={orderBy}
+                    toogleOrderBy={toogleOrderBy}
                 />
             </div>
 
             <div className="result-area">
                 <div className="result-list">
                     {renderList()}
-                    <div className="loading-list">{loading && "LOADING"}</div>
+                    <div className="loading-list">{false && "LOADING"}</div>
                 </div>
+                <div className="footer">
+                    <div className="total-results">
+                        <strong>
+                            Foram encontradas {totalEntities} ocorrências
+                        </strong>
+                    </div>
 
-                {characters.length > 0 && (
-                    <Pagination
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                        setCurrentPage={setCurrentPage}
-                    />
-                )}
+                    {entities.length > 0 && (
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            setCurrentPage={setCurrentPage}
+                        />
+                    )}
+                </div>
             </div>
         </Container>
     );
