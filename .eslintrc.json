@@ -26,7 +26,9 @@
         "prettier"
     ],
     "rules": {
-        "camelcase": "off",
+        "arrow-body-style": "off",
+        "prefer-arrow-callback": "off",
+        "camelcase": "error",
         "import/no-unresolved": "error",
         "@typescript-eslint/naming-convention": [
             "error",
@@ -94,6 +96,7 @@
             }
         ],
         "react/react-in-jsx-scope": "off",
+        "eslint-disable-next-line": "off",
         "no-use-before-define": "off",
         "@typescript-eslint/no-use-before-define": [
             "error"
@@ -101,7 +104,9 @@
     },
     "settings": {
         "import/resolver": {
-            "typescript": {}
+            "typescript": {
+                "directory": "./tsconfig.json"
+            }
         }
     }
 }

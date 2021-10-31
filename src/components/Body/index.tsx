@@ -8,23 +8,13 @@ import { useEntities } from "../../hooks/useEntities";
 import { usePagination } from "../../hooks/usePagination";
 import { useQueryOnURL } from "../../hooks/useQueryOnURL";
 import { api } from "../../services/api";
-import { SearchType } from "../../types";
+import { SearchType, IEntity } from "../../types";
 import Pagination from "../Pagination";
 import SearchTypeButton from "../SearchTypeButton";
 import { Container, Card } from "./styles";
 
 interface IRouterParam {
     type: string;
-}
-
-interface IEntities {
-    id: number;
-    name?: string;
-    title?: string;
-    thumbnail?: {
-        path: string;
-        extension: string;
-    };
 }
 
 export const Body = (): JSX.Element => {
@@ -82,6 +72,9 @@ export const Body = (): JSX.Element => {
 
         return false;
     }
+    function generatorBadgeType(entity: IEntity) {
+        return entity.name ? "CHARACTER" : "COMIC";
+    }
 
     const renderList = () => {
         return entities?.map((entity) => (
@@ -94,9 +87,9 @@ export const Body = (): JSX.Element => {
                         />
                     </div>
                 )}
-                <div className="title">
-                    <strong>{entity.name}</strong>
-                </div>
+
+                <strong>{entity.name || entity.title}</strong>
+                <small>{generatorBadgeType(entity)}</small>
             </Card>
         ));
     };

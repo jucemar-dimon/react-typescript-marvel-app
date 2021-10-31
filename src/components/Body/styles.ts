@@ -3,6 +3,9 @@ import styled from "styled-components";
 interface IContainerProps {
     isLoading: boolean;
 }
+interface ICardProps {
+    type: string;
+}
 
 export const Container = styled.main<IContainerProps>`
     color: var(--body-font-color);
@@ -135,14 +138,13 @@ export const Card = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    align-items: stretch;
+    align-items: center;
     width: 100%;
     padding: 0;
-
     background: var(--marvel-header-nav);
     transition: background 0.5s;
-
     gap: 1rem;
+    position: relative;
 
     &:hover {
         background-color: var(--marvel-border);
@@ -150,22 +152,23 @@ export const Card = styled.div`
     }
 
     div {
-        width: 3rem;
         height: 3rem;
+        width: 3rem;
         overflow: hidden;
-
         img {
-            height: 3rem;
             margin: 0;
+            width: 5rem;
         }
     }
+    strong {
+        flex-grow: 1;
+    }
 
-    div.title {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: flex-start;
-        gap: 1rem;
-        width: 100%;
+    small {
+        text-align: right;
+        font-size: 0.75rem;
+        margin: 0.5rem;
+        background-color: var(--marvel-border);
+        padding: 0.5rem;
     }
 `;

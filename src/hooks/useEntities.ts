@@ -2,49 +2,7 @@ import { AxiosResponse } from "axios";
 import { useState } from "react";
 
 import { api } from "../services/api";
-
-interface IImage {
-    // The directory path of to the image.,
-    path?: string;
-    // The file extension for the image.
-    extension: string;
-}
-
-interface IData {
-    limit: number;
-    total: number;
-    count: number;
-    results: [IEntity];
-}
-
-interface IReturnedProps {
-    entities: IEntity[];
-    getEntities: (page: number) => void;
-    totalPages: number;
-    totalEntities: number;
-    setEntities: (entities: IEntity[]) => void;
-    orderBy: string;
-    setOrderBy: (order: string) => void;
-}
-
-interface IEntity {
-    // The unique ID of the character resource.,
-    id?: number;
-    // The name of the character.,
-    name?: string;
-    // A short bio or description of the character.,
-    description: string;
-    // The date the resource was most recently modified.,
-    modified?: Date;
-    // The representative image for this character.,
-    thumbnail?: IImage;
-}
-
-interface IResponse {
-    code: number;
-    status: string;
-    data: IData;
-}
+import { IReturnedProps, IEntity, IResponse } from "../types";
 
 export function useEntities(
     query: string,
