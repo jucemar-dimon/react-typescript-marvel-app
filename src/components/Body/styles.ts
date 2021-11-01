@@ -39,43 +39,11 @@ export const Container = styled.main<IContainerProps>`
         display: flex;
         flex-direction: row;
         align-items: stretch;
-
         justify-content: space-between;
         background: var(--background);
         width: 100%;
         height: 4.4rem;
-
         position: relative;
-
-        div.search-field {
-            padding: 0.5rem;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex: 1;
-
-            input {
-                height: 3rem;
-                width: 100%;
-                padding: 0.5rem;
-                color: white;
-                border-radius: 0.5rem;
-                border: 0.1rem solid var(--marvel-border);
-                background-color: var(--marvel-header-nav);
-            }
-            a {
-                position: absolute;
-                top: 0;
-                right: 1rem;
-                bottom: 0;
-                background: transparent;
-                border: none;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
-        }
     }
 
     div.result-area {
@@ -166,7 +134,7 @@ export const Card = styled.div`
 
     small {
         text-align: right;
-        font-size: 0.75rem;
+        font-size: 0.65rem;
         margin: 0.5rem;
         background-color: var(--marvel-border);
         padding: 0.5rem;

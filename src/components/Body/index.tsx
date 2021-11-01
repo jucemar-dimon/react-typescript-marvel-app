@@ -1,5 +1,3 @@
-import { AxiosResponse } from "axios";
-import qs from "query-string";
 import React, { useEffect, useState, memo } from "react";
 import { HiX } from "react-icons/hi";
 import { Link, useLocation, useHistory, useParams } from "react-router-dom";
@@ -7,9 +5,9 @@ import { Link, useLocation, useHistory, useParams } from "react-router-dom";
 import { useEntities } from "../../hooks/useEntities";
 import { usePagination } from "../../hooks/usePagination";
 import { useQueryOnURL } from "../../hooks/useQueryOnURL";
-import { api } from "../../services/api";
 import { SearchType, IEntity } from "../../types";
 import Pagination from "../Pagination";
+import SearchField from "../SearchField";
 import SearchTypeButton from "../SearchTypeButton";
 import { Container, Card } from "./styles";
 
@@ -18,8 +16,8 @@ interface IRouterParam {
 }
 
 export const Body = (): JSX.Element => {
-    const SEARCH_TYPE_CHARACTER = "characters";
-    const SEARCH_TYPE_COMICS = "comics";
+    const QUERY_MIN_LENGTH = 0;
+
     const ASC_ORDER = "";
     const DES_ORDER = "-";
     const [query, setQuery] = useState<string>("");
@@ -41,12 +39,24 @@ export const Body = (): JSX.Element => {
     const { setActualQuery, setActualPath, clearSearch } = useQueryOnURL();
 
     useEffect(() => {
-        getEntities(currentPage);
+        if (query.length > QUERY_MIN_LENGTH && searchType.length > 0) {
+            getEntities(currentPage);
+        }
     }, [query, currentPage, searchType, orderBy]);
 
     useEffect(() => {
         setActualQuery(query);
     }, [type]);
+
+    const handleChange = (searchString: string) => {
+        setQuery(searchString);
+        setActualQuery(searchString);
+        console.log("QUERY", query);
+    };
+
+    const toogleOrderBy = () => {
+        setOrderBy(orderBy === ASC_ORDER ? DES_ORDER : ASC_ORDER);
+    };
 
     const handleSearchType = (type: SearchType) => {
         setSearchType(type);
@@ -62,16 +72,6 @@ export const Body = (): JSX.Element => {
         setOrderBy(ASC_ORDER);
     };
 
-    function isInputDisabled() {
-        if (
-            searchType !== SEARCH_TYPE_CHARACTER &&
-            searchType !== SEARCH_TYPE_COMICS
-        ) {
-            return true;
-        }
-
-        return false;
-    }
     function generatorBadgeType(entity: IEntity) {
         return entity.name ? "CHARACTER" : "COMIC";
     }
@@ -94,34 +94,22 @@ export const Body = (): JSX.Element => {
         ));
     };
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setQuery(event.currentTarget.value);
-        setActualQuery(event.currentTarget.value);
-        console.log("QUERY", query);
-    };
-
-    const toogleOrderBy = () => {
-        setOrderBy(orderBy === ASC_ORDER ? DES_ORDER : ASC_ORDER);
-    };
-
     return (
         <Container isLoading={false}>
             <div className="search-form">
-                <div className="search-field">
-                    <input
-                        disabled={isInputDisabled()}
+                <SearchField
+                    value={query}
+                    onchange={handleChange}
+                    handleClear={handleClear}
+                />
+                {/*  <input
                         value={query}
                         onChange={handleChange}
                         type="text"
                         name="search"
                         id="search-field"
-                    />
-                    {query && query.length > 0 && (
-                        <Link to="/" onClick={handleClear}>
-                            <HiX size="1.5rem" color="#fff" />
-                        </Link>
-                    )}
-                </div>
+                    /> */}
+
                 <SearchTypeButton
                     handleSearchType={handleSearchType}
                     data={searchType}
@@ -137,9 +125,11 @@ export const Body = (): JSX.Element => {
                 </div>
                 <div className="footer">
                     <div className="total-results">
-                        <strong>
-                            Foram encontradas {totalEntities} ocorrências
-                        </strong>
+                        {entities.length > 0 && (
+                            <strong>
+                                Foram encontradas {totalEntities} ocorrências
+                            </strong>
+                        )}
                     </div>
 
                     {entities.length > 0 && (
