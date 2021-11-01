@@ -6,6 +6,7 @@ import { IReturnedProps, IEntity, IResponse } from "../types";
 
 export function useEntities(
     query: string,
+    setIsLoading: (status: boolean) => void,
     searchType: string,
     pageLimit: number
 ): IReturnedProps {
@@ -39,6 +40,7 @@ export function useEntities(
             setTotalPages(calcTotalPages);
             setEntities(apiResponse.data.results);
             setTotalEntities(apiResponse.data.total);
+            setIsLoading(false);
         });
     }
     return {

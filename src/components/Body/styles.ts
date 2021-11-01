@@ -1,13 +1,6 @@
 import styled from "styled-components";
 
-interface IContainerProps {
-    isLoading: boolean;
-}
-interface ICardProps {
-    type: string;
-}
-
-export const Container = styled.main<IContainerProps>`
+export const Container = styled.main`
     color: var(--body-font-color);
     margin-left: auto;
     margin-right: auto;
@@ -73,29 +66,20 @@ export const Container = styled.main<IContainerProps>`
             gap: 0.5rem;
             display: flex;
             flex-direction: column;
-
+            height: 100%;
             position: relative;
 
             div.loading-list {
-                border-radius: 0.5rem;
-                font-size: 1rem;
-                font-weight: bold;
+                display: flex;
                 justify-content: center;
                 align-items: center;
-                color: white;
-                background: #ec1d2499;
-
-                height: 100%;
-                position: absolute;
-                z-index: 10;
+                background-color: #000000aa;
                 top: 0;
                 left: 0;
                 right: 0;
                 bottom: 0;
 
-                margin-left: auto;
-                margin-right: auto;
-                display: ${(props) => (props.isLoading ? "flex" : "none")};
+                position: absolute;
             }
         }
     }

@@ -33,8 +33,8 @@ export default function SearchField({
     return (
         <Container>
             <input
-                placeholder="Digite o termo para buscar"
-                aria-label="Busca de character or comics da marvel"
+                placeholder="Enter your search keyword"
+                aria-label="Search for marvel character or comics"
                 type="text"
                 value={displayValue}
                 onChange={handleChange}

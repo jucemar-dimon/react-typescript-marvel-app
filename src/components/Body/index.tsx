@@ -1,7 +1,9 @@
 import React, { useEffect, useState, memo } from "react";
 import { HiX } from "react-icons/hi";
+import Lottie from "react-lottie";
 import { Link, useLocation, useHistory, useParams } from "react-router-dom";
 
+import animationData from "../../assets/animations/lf20_tcrsnby9.json";
 import { useEntities } from "../../hooks/useEntities";
 import { usePagination } from "../../hooks/usePagination";
 import { useQueryOnURL } from "../../hooks/useQueryOnURL";
@@ -16,11 +18,12 @@ interface IRouterParam {
 }
 
 export const Body = (): JSX.Element => {
-    const QUERY_MIN_LENGTH = 0;
+    const QUERY_MIN_LENGTH = 2;
 
     const ASC_ORDER = "";
     const DES_ORDER = "-";
     const [query, setQuery] = useState<string>("");
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const { type } = useParams<IRouterParam>();
 
@@ -34,12 +37,13 @@ export const Body = (): JSX.Element => {
         totalEntities,
         orderBy,
         setOrderBy,
-    } = useEntities(query, searchType, 10);
+    } = useEntities(query, setIsLoading, searchType, 10);
     const { currentPage, setCurrentPage } = usePagination();
     const { setActualQuery, setActualPath, clearSearch } = useQueryOnURL();
 
     useEffect(() => {
         if (query.length > QUERY_MIN_LENGTH && searchType.length > 0) {
+            setIsLoading(true);
             getEntities(currentPage);
         }
     }, [query, currentPage, searchType, orderBy]);
@@ -47,6 +51,15 @@ export const Body = (): JSX.Element => {
     useEffect(() => {
         setActualQuery(query);
     }, [type]);
+
+    const lottieDefaultOptions = {
+        loop: true,
+        autoplay: true,
+        animationData,
+        rendererSettings: {
+            preserveAspectRatio: "xMidYMid slice",
+        },
+    };
 
     const handleChange = (searchString: string) => {
         setQuery(searchString);
@@ -77,25 +90,30 @@ export const Body = (): JSX.Element => {
     }
 
     const renderList = () => {
-        return entities?.map((entity) => (
-            <Card key={entity.id}>
-                {entity.thumbnail && (
-                    <div>
-                        <img
-                            src={`${entity.thumbnail.path}.${entity.thumbnail.extension}`}
-                            alt={`Imagem do personagem ${entity.name}`}
-                        />
-                    </div>
-                )}
+        return entities?.map((entity, index) => {
+            if (index === entities.length) {
+                setIsLoading(false);
+            }
+            return (
+                <Card key={entity.id}>
+                    {entity.thumbnail && (
+                        <div>
+                            <img
+                                src={`${entity.thumbnail.path}.${entity.thumbnail.extension}`}
+                                alt={`Imagem do personagem ${entity.name}`}
+                            />
+                        </div>
+                    )}
 
-                <strong>{entity.name || entity.title}</strong>
-                <small>{generatorBadgeType(entity)}</small>
-            </Card>
-        ));
+                    <strong>{entity.name || entity.title}</strong>
+                    <small>{generatorBadgeType(entity)}</small>
+                </Card>
+            );
+        });
     };
 
     return (
-        <Container isLoading={false}>
+        <Container>
             <div className="search-form">
                 <SearchField
                     value={query}
@@ -121,25 +139,36 @@ export const Body = (): JSX.Element => {
             <div className="result-area">
                 <div className="result-list">
                     {renderList()}
-                    <div className="loading-list">{false && "LOADING"}</div>
-                </div>
-                <div className="footer">
-                    <div className="total-results">
-                        {entities.length > 0 && (
-                            <strong>
-                                Foram encontradas {totalEntities} ocorrências
-                            </strong>
-                        )}
-                    </div>
-
-                    {entities.length > 0 && (
-                        <Pagination
-                            currentPage={currentPage}
-                            totalPages={totalPages}
-                            setCurrentPage={setCurrentPage}
-                        />
+                    {isLoading && (
+                        <div className="loading-list">
+                            <Lottie
+                                options={lottieDefaultOptions}
+                                height="20rem"
+                                width="20rem"
+                            />
+                        </div>
                     )}
                 </div>
+                {entities.length > 0 && (
+                    <div className="footer">
+                        <div className="total-results">
+                            {entities.length > 0 && (
+                                <strong>
+                                    Foram encontradas {totalEntities}{" "}
+                                    ocorrências
+                                </strong>
+                            )}
+                        </div>
+
+                        {entities.length > 0 && (
+                            <Pagination
+                                currentPage={currentPage}
+                                totalPages={totalPages}
+                                setCurrentPage={setCurrentPage}
+                            />
+                        )}
+                    </div>
+                )}
             </div>
         </Container>
     );
