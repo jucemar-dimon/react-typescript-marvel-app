@@ -1,9 +1,8 @@
 import qs from "query-string";
 import { useEffect, useState } from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 export function useQueryOnURL() {
-    const location = useLocation();
     const history = useHistory();
 
     const [actualQuery, setActualQuery] = useState("");

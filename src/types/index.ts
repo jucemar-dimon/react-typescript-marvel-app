@@ -1,3 +1,19 @@
+// Hack para lib react-lottie-player
+import Lottie from "react-lottie-player";
+// react-lottie-player doesn't export LottieProps
+// https://stackoverflow.com/a/50924506/3793499
+type TypeWithGeneric<T> = React.FC<T>;
+type extractGeneric<Type> = Type extends TypeWithGeneric<infer X> ? X : any;
+type LottiePropsIncludingNativeHTMLProps = extractGeneric<typeof Lottie>;
+type LottieProps = Omit<
+    LottiePropsIncludingNativeHTMLProps,
+    | keyof React.ClassAttributes<HTMLDivElement>
+    | keyof React.HTMLAttributes<HTMLDivElement>
+>;
+export interface IAnimationProps extends LottieProps {
+    play?: boolean;
+}
+
 export type SearchType = "characters" | "comics" | "";
 
 export interface IPaginationProps {

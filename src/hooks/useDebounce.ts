@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 
 export default function useDebounce(fn: any, delay: number) {
     const timeoutRef = useRef<number>(0);

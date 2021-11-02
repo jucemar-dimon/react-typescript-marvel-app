@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
     HiUserGroup,
     HiOutlineBookOpen,
     HiSortAscending,
     HiSortDescending,
 } from "react-icons/hi";
-import { Link } from "react-router-dom";
 
 import { SearchType } from "../../types";
 import { Container } from "./styles";

@@ -1,9 +1,9 @@
 import React, { useEffect, useState, memo } from "react";
-import { HiX } from "react-icons/hi";
-import Lottie from "react-lottie";
-import { Link, useLocation, useHistory, useParams } from "react-router-dom";
+import Lottie from "react-lottie-player";
+import { useParams } from "react-router-dom";
 
-import animationData from "../../assets/animations/lf20_tcrsnby9.json";
+import noDataAnimation from "../../assets/animations/67375-no-data.json";
+import loadingAnimation from "../../assets/animations/lf20_tcrsnby9.json";
 import { useEntities } from "../../hooks/useEntities";
 import { usePagination } from "../../hooks/usePagination";
 import { useQueryOnURL } from "../../hooks/useQueryOnURL";
@@ -24,9 +24,7 @@ export const Body = (): JSX.Element => {
     const DES_ORDER = "-";
     const [query, setQuery] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
-
     const { type } = useParams<IRouterParam>();
-
     const [searchType, setSearchType] = useState<SearchType>("");
 
     const {
@@ -51,15 +49,6 @@ export const Body = (): JSX.Element => {
     useEffect(() => {
         setActualQuery(query);
     }, [type]);
-
-    const lottieDefaultOptions = {
-        loop: true,
-        autoplay: true,
-        animationData,
-        rendererSettings: {
-            preserveAspectRatio: "xMidYMid slice",
-        },
-    };
 
     const handleChange = (searchString: string) => {
         setQuery(searchString);
@@ -90,10 +79,30 @@ export const Body = (): JSX.Element => {
     }
 
     const renderList = () => {
+        if (
+            entities.length === 0 &&
+            !isLoading &&
+            query.length > 2 &&
+            searchType.length > 0
+        ) {
+            return (
+                <div className="loading-list">
+                    <Lottie
+                        loop={false}
+                        animationData={noDataAnimation}
+                        style={{ height: "20rem", width: "20rem" }}
+                        segments={[0, 98]}
+                        play
+                    />
+                </div>
+            );
+        }
+
         return entities?.map((entity, index) => {
             if (index === entities.length) {
                 setIsLoading(false);
             }
+
             return (
                 <Card key={entity.id}>
                     {entity.thumbnail && (
@@ -142,9 +151,9 @@ export const Body = (): JSX.Element => {
                     {isLoading && (
                         <div className="loading-list">
                             <Lottie
-                                options={lottieDefaultOptions}
-                                height="20rem"
-                                width="20rem"
+                                play
+                                animationData={loadingAnimation}
+                                style={{ height: "20rem", width: "20rem" }}
                             />
                         </div>
                     )}
