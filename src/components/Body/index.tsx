@@ -37,7 +37,8 @@ export const Body = (): JSX.Element => {
         setOrderBy,
     } = useEntities(query, setIsLoading, searchType, 10);
     const { currentPage, setCurrentPage } = usePagination();
-    const { setActualQuery, setActualPath, clearSearch } = useQueryOnURL();
+    const { setParamOrderBy, setParamPath, setParamQuery, clearSearch } =
+        useQueryOnURL();
 
     useEffect(() => {
         if (query.length > QUERY_MIN_LENGTH && searchType.length > 0) {
@@ -47,22 +48,24 @@ export const Body = (): JSX.Element => {
     }, [query, currentPage, searchType, orderBy]);
 
     useEffect(() => {
-        setActualQuery(query);
+        setParamQuery(query);
     }, [type]);
 
     const handleChange = (searchString: string) => {
         setQuery(searchString);
-        setActualQuery(searchString);
+        setParamQuery(searchString);
         console.log("QUERY", query);
     };
 
     const toogleOrderBy = () => {
-        setOrderBy(orderBy === ASC_ORDER ? DES_ORDER : ASC_ORDER);
+        const toogle = orderBy === ASC_ORDER ? DES_ORDER : ASC_ORDER;
+        setOrderBy(toogle);
+        setParamOrderBy(toogle);
     };
 
     const handleSearchType = (type: SearchType) => {
         setSearchType(type);
-        setActualPath(type);
+        setParamPath(type);
         setCurrentPage(1);
     };
 

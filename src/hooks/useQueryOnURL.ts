@@ -2,36 +2,53 @@ import qs from "query-string";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
-export function useQueryOnURL() {
+export function useQueryOnURL(): {
+    setParamQuery: (query: string) => void;
+    setParamPath: (path: string) => void;
+    clearSearch: () => void;
+    setParamOrderBy: (order: string) => void;
+} {
     const history = useHistory();
-
-    const [actualQuery, setActualQuery] = useState("");
-    const [actualPath, setActualPath] = useState("");
+    const [paramQuery, setParamQuery] = useState("");
+    const [paramPath, setParamPath] = useState("");
+    const [paramOrderBy, setParamOrderBy] = useState("");
 
     const clearSearch = () => {
-        setActualPath("");
-        setActualQuery("");
+        setParamPath("");
+        setParamQuery("");
+        setParamOrderBy("");
         history.push("");
     };
 
     useEffect(() => {
-        if (actualPath.length > 0) {
+        if (paramPath.length > 0) {
             history.push({
-                pathname: actualPath,
+                pathname: paramPath,
             });
         }
-    }, [actualPath]);
+    }, [paramPath]);
+
+    const buildOrderName = (path: string) => {
+        if (path.includes("characters")) {
+            return "orderByCharacterName";
+        }
+
+        return "orderByComicTitle";
+    };
 
     useEffect(() => {
-        if (actualQuery.length > 0) {
+        if (paramQuery.length > 0 && paramPath.length > 0) {
             history.push({
                 search: qs.stringify({
-                    query: actualQuery,
+                    [buildOrderName(paramPath)]: paramOrderBy.includes("-")
+                        ? "DSC"
+                        : "ASC",
+                    query: paramQuery,
                     page: 1,
                 }),
             });
         }
-    }, [actualQuery]);
+    }, [paramQuery, paramPath, paramOrderBy]);
 
-    return { setActualQuery, actualQuery, setActualPath, clearSearch };
+    return { clearSearch, setParamOrderBy, setParamPath, setParamQuery };
 }

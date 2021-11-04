@@ -12,3 +12,5 @@ Eslint e Prettier: Referencias https://matheusteixeirajs.medium.com/como-configu
 
  ## Estado do deploy
  [![Netlify Status](https://api.netlify.com/api/v1/badges/e5523dfe-eaf1-45ed-8db9-f7143d06b7fa/deploy-status)](https://app.netlify.com/sites/marvel-entities-search/deploys)
+
+ Feito com ❤️ por Jucemar Dimon  👋  [Entre em contato!](https://www.linkedin.com/in/jucemar-dimon/)
